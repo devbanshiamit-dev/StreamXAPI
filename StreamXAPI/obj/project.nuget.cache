@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4Hdji18seD0=",
+  "dgSpecHash": "oSGuUu9hnro=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Lenovo\\Desktop\\FullStack_Authentication\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj",
+  "projectFilePath": "C:\\Users\\Lenovo\\Desktop\\FullStack\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Lenovo\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",

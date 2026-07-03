@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Lenovo\\Desktop\\FullStack_Authentication\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj": {}
+    "C:\\Users\\Lenovo\\Desktop\\FullStack\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Lenovo\\Desktop\\FullStack_Authentication\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj": {
+    "C:\\Users\\Lenovo\\Desktop\\FullStack\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\FullStack_Authentication\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\FullStack\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj",
         "projectName": "StreamXAPI",
-        "projectPath": "C:\\Users\\Lenovo\\Desktop\\FullStack_Authentication\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj",
+        "projectPath": "C:\\Users\\Lenovo\\Desktop\\FullStack\\Backend\\StreamXAPI\\StreamXAPI\\StreamXAPI.csproj",
         "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Lenovo\\Desktop\\FullStack_Authentication\\Backend\\StreamXAPI\\StreamXAPI\\obj\\",
+        "outputPath": "C:\\Users\\Lenovo\\Desktop\\FullStack\\Backend\\StreamXAPI\\StreamXAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

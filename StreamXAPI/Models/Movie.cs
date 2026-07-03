@@ -18,6 +18,7 @@
 
         public int Duration { get; set; } // Minutes
 
+
         public double Rating { get; set; }
 
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
@@ -29,7 +30,7 @@
     {
         public int Id { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+        public string GenreName { get; set; } = string.Empty;
 
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
     }
