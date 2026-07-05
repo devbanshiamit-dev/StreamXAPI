@@ -1,6 +1,7 @@
-﻿using StreamXAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using StreamXAPI.Data;
-using Microsoft.EntityFrameworkCore;
+using StreamXAPI.Models;
+using StreamXAPI.Pagination;
 
 namespace StreamXAPI.Repo
 {
@@ -12,10 +13,22 @@ namespace StreamXAPI.Repo
             _con = context;
         }
 
-        public async Task<IEnumerable<Movie>> GetAllAsync() =>
-        await _con.Movies
-               .AsNoTracking()
-               .ToListAsync();
+        public async Task<PagedResult<Movie>> GetPagedMoviesAsync(PaginationParams paginationParams)
+        {
+            var totalCount = await _con.Movies.CountAsync();
+
+            var items = await _con.Movies
+                .AsNoTracking()
+                .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<Movie>
+            {
+                TotalRecords = totalCount,
+                Items = items
+            };
+        }
 
         public async Task<Movie?> GetByIdAsync(int id) =>
             await _con.Movies.FirstOrDefaultAsync(m => m.Id == id);

@@ -1,10 +1,11 @@
 ﻿using StreamXAPI.Models;
+using StreamXAPI.Pagination;
 
 namespace StreamXAPI.Services
 {
     public interface IMovieService
     {
-        Task<IEnumerable<Movie>> GetAllMoviesAsync();
+        Task<PagedResult<Movie>> GetAllMoviesAsync(PaginationParams paginationParams);
         Task AddMovieAsync(Movie movie);
         Task UpdateMovieAsync(Movie movie);
         Task DeleteMovieAsync(int id);

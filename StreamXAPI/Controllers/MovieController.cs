@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StreamXAPI.CustomeExceptions;
 using StreamXAPI.Models;
+using StreamXAPI.Pagination;
 using StreamXAPI.Services;
 
 namespace StreamXAPI.Controllers
@@ -41,9 +42,9 @@ namespace StreamXAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMovies()
+        public async Task<IActionResult> GetMovies([FromQuery] PaginationParams paginationParams)
         {
-            return Ok(await _mov.GetAllMoviesAsync());
+            return Ok(await _mov.GetAllMoviesAsync(paginationParams));
         }
 
         [HttpGet("actor/{actorName}")]

@@ -1,5 +1,6 @@
 ﻿using StreamXAPI.CustomeExceptions;
 using StreamXAPI.Models;
+using StreamXAPI.Pagination;
 using StreamXAPI.Repo;
 
 namespace StreamXAPI.Services
@@ -12,7 +13,21 @@ namespace StreamXAPI.Services
             _repo = repo;
         }
 
-        public Task<IEnumerable<Movie>> GetAllMoviesAsync() => _repo.GetAllAsync();
+        public async Task<PagedResult<Movie>> GetAllMoviesAsync(PaginationParams paginationParams)
+        {
+            var pagedMovies = await _repo.GetPagedMoviesAsync(paginationParams);
+
+            var TotalPages = (int)Math.Ceiling((double)pagedMovies.TotalRecords / paginationParams.PageSize);
+
+            return await Task.FromResult(new PagedResult<Movie>
+            {
+                Items = pagedMovies.Items,
+                TotalPages = TotalPages,
+                TotalRecords = pagedMovies.TotalRecords,
+                CurrentPage = paginationParams.PageNumber,
+                PageSize = paginationParams.PageSize
+            });
+        }
 
         public Task<Movie?> GetMovieByIdAsync(int id) => _repo.GetByIdAsync(id);
 

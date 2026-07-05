@@ -1,10 +1,11 @@
 ﻿using StreamXAPI.Models;
+using StreamXAPI.Pagination;
 
 namespace StreamXAPI.Repo
 {
     public interface IMovieRepository
     {
-        Task<IEnumerable<Movie>> GetAllAsync();
+        Task<PagedResult<Movie>> GetPagedMoviesAsync(PaginationParams paginationParams);
         Task<Movie?> GetByIdAsync(int id);
         Task<IEnumerable<Movie>> GetByCategoryAsync(int categoryId);
         Task<IEnumerable<Movie>> SearchAsync(string searchTerm);
