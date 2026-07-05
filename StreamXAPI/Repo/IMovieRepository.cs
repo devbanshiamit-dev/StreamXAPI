@@ -8,10 +8,11 @@ namespace StreamXAPI.Repo
         Task<Movie?> GetByIdAsync(int id);
         Task<IEnumerable<Movie>> GetByCategoryAsync(int categoryId);
         Task<IEnumerable<Movie>> SearchAsync(string searchTerm);
-        Task<IEnumerable<Movie>> GetByActorAsync(int actorId);
+        Task<IEnumerable<Movie>> GetByActorAsync(string actorName);
         Task AddAsync(Movie movie);
         Task UpdateAsync(Movie movie);
-        Task RemoveAsync(Movie movie);
-        Task<bool> ExistsAsync(int id);
+        Task RemoveAsync(int id);
+        Task<bool> ExistsByIdAsync(int id);
+        Task<bool> ExistsByTitleAsync(string title);
     }
 }

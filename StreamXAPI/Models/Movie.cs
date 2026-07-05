@@ -1,24 +1,35 @@
-﻿namespace StreamXAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StreamXAPI.Models
 {
     public class Movie
     {
         public int Id { get; set; }
 
+        [Required]
+        [MaxLength(100)]
         public string Title { get; set; } = string.Empty;
 
+        [MaxLength(1000)]
         public string Description { get; set; } = string.Empty;
 
+        [Required]
         public DateTime ReleaseDate { get; set; }
 
+        [Url]
         public string ThumbnailUrl { get; set; } = string.Empty;
 
+        [Url]
         public string BannerUrl { get; set; } = string.Empty;
 
+        [Url]
         public string VideoUrl { get; set; } = string.Empty;
 
+        [Range(1, 600)]
         public int Duration { get; set; } // Minutes
 
 
+        [Range(0, 10)]
         public double Rating { get; set; }
 
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
@@ -30,6 +41,8 @@
     {
         public int Id { get; set; }
 
+        [MaxLength(100)]
+        [Required]
         public string GenreName { get; set; } = string.Empty;
 
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
@@ -48,11 +61,14 @@
     public class Actor
     {
         public int Id { get; set; }
-
+        
+        [Required]
+        [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
 
         public DateTime DateOfBirth { get; set; }
 
+        [Url]
         public string ImageUrl { get; set; } = string.Empty;
 
         public ICollection<MovieActor> MovieActors { get; set; } = new List<MovieActor>();

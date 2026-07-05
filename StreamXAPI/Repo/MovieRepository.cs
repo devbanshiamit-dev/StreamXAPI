@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace StreamXAPI.Repo
 {
-    public class MovieRepository
+    public class MovieRepository : IMovieRepository
     {
         private readonly AppDbContext _con;
         public MovieRepository(AppDbContext context)
@@ -33,12 +33,11 @@ namespace StreamXAPI.Repo
                 m.Description.Contains(searchTerm)))
                 .ToListAsync();
 
-
-        public async Task<IEnumerable<Movie>> GetByActorAsync(int actorId) =>
-            await _con.Actors
-                .Where(a => a.Id == actorId)
-                .SelectMany(a => a.MovieActors.Select(ma => ma.Movie))
+        public async Task<IEnumerable<Movie>> GetByActorAsync(string actorName) =>
+            await _con.Movies
+                .Where(m => m.MovieActors.Any(ma => ma.Actor.Name == actorName))
                 .ToListAsync();
+
 
         public  async Task AddAsync(Movie movie)
         {
@@ -52,13 +51,20 @@ namespace StreamXAPI.Repo
             await _con.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(Movie movie)
+        public async Task RemoveAsync(int id)
         {
-            _con.Movies.Remove(movie);
-            await _con.SaveChangesAsync();
+            var existingMovie = await _con.Movies.FirstOrDefaultAsync(m => m.Id == id);
+            if (existingMovie != null)
+            {
+                _con.Movies.Remove(existingMovie);
+                await _con.SaveChangesAsync();
+            }
         }
 
-        public async Task<bool> ExistsAsync(int id) =>
+        public async Task<bool> ExistsByIdAsync(int id) =>
             await _con.Movies.AnyAsync(m => m.Id == id);
+
+        public async Task<bool> ExistsByTitleAsync(string title) =>
+            await _con.Movies.AnyAsync(m => m.Title == title);
     }
 }
