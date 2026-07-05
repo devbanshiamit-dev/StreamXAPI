@@ -20,6 +20,9 @@ namespace StreamXAPI.Repo
         public async Task<Movie?> GetByIdAsync(int id) =>
             await _con.Movies.FirstOrDefaultAsync(m => m.Id == id);
 
+        public async Task<bool> ExistsByTitleExceptIdAsync(string title, int id) =>
+            await _con.Movies.AnyAsync(m => m.Title == title && m.Id != id);
+
         public async Task<IEnumerable<Movie>> GetByCategoryAsync(int categoryId) =>
             await _con.Genres
                 .Where(g => g.Id == categoryId)

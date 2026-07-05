@@ -15,34 +15,37 @@ namespace StreamXAPI.Controllers
             _mov = mov;
         }
 
-        [HttpPost("Add")]
-        public async Task<IActionResult> AddMovie(Movie movie)
+        [HttpPost]
+        public async Task<IActionResult> AddMovie([FromBody] Movie movie)
         {
             await _mov.AddMovieAsync(movie);
-            return CreatedAtAction(nameof(GetMovies), new { id = movie.Id }, movie);
+            return CreatedAtAction(nameof(GetMovieById), new { id = movie.Id }, movie);
         }
 
-        [HttpPut("Update")]
-        public async Task<IActionResult> UpdateMovie(Movie movie)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMovie(int id, [FromBody] Movie movie)
         {
+            if (id != movie.Id)
+                return BadRequest();
+
             await _mov.UpdateMovieAsync(movie);
             return Ok(movie);
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {
             await _mov.DeleteMovieAsync(id);
             return NoContent();
         }
 
-        [HttpGet("Get")]
+        [HttpGet]
         public async Task<IActionResult> GetMovies()
         {
             return Ok(await _mov.GetAllMoviesAsync());
         }
 
-        [HttpGet("GetByActor/{actorName}")]
+        [HttpGet("actor/{actorName}")]
         public async Task<IActionResult> GetMoviesByActor(string actorName)
         {
             return Ok(await _mov.GetMoviesByActorAsync(actorName));
@@ -55,13 +58,13 @@ namespace StreamXAPI.Controllers
         }
         
 
-        [HttpGet("GetByCategory/{categoryId}")]
+        [HttpGet("category/{categoryId}")]
         public async Task<IActionResult> GetMoviesByCategory(int categoryId)
         {
             return Ok(await _mov.GetMoviesByCategoryAsync(categoryId));
         }
 
-        [HttpGet("GetById/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetMovieById(int id)
         {
             return Ok(await _mov.GetMovieByIdAsync(id));

@@ -1,4 +1,5 @@
-﻿using StreamXAPI.Models;
+﻿using StreamXAPI.CustomeExceptions;
+using StreamXAPI.Models;
 using StreamXAPI.Repo;
 
 namespace StreamXAPI.Services
@@ -19,7 +20,7 @@ namespace StreamXAPI.Services
         {
             ValidateMovie(movie);
 
-            if (await _repo.ExistsByTitleAsync(movie.Title)) { throw new ArgumentException("Movie Already Exists"); }
+            if (await _repo.ExistsByTitleExceptIdAsync(movie.Title, movie.Id)) { throw new DuplicateException("Movie Title Already Exists"); }
 
             await _repo.AddAsync(movie);
         }
@@ -27,35 +28,37 @@ namespace StreamXAPI.Services
         {
             ValidateMovie(movie);
 
-            if (!await _repo.ExistsByIdAsync(movie.Id)) { throw new ArgumentException("Movie Not Found"); }
+            if (!await _repo.ExistsByIdAsync(movie.Id))
+                throw new NotFoundException("Movie not found.");
 
-            if (! await _repo.ExistsByTitleAsync(movie.Title)) { throw new ArgumentException("Movie Title Already Exists"); }
+            if (await _repo.ExistsByTitleExceptIdAsync(movie.Title, movie.Id))
+                throw new DuplicateException("Movie title already exists.");
 
             await _repo.UpdateAsync(movie);
         }
         public async Task DeleteMovieAsync(int id)
         {
-            if (!await _repo.ExistsByIdAsync(id)) { throw new ArgumentException("Movie Not Found"); }
+            if (!await _repo.ExistsByIdAsync(id)) { throw new NotFoundException("Movie Not Found"); }
             await _repo.RemoveAsync(id);
         }
         public async Task<IEnumerable<Movie>> GetMoviesByActorAsync(string actorName)
         {
             if (string.IsNullOrWhiteSpace(actorName))
-                throw new ArgumentException("Actor name cannot be null or empty.");
+                throw new ValidationException("Actor name cannot be null or empty.");
             
             return await _repo.GetByActorAsync(actorName);
         }
         public async Task<IEnumerable<Movie>> SearchMoviesAsync(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
-                throw new ArgumentException("Search term cannot be null or empty.");
+                throw new ValidationException("Search term cannot be null or empty.");
             
             return await _repo.SearchAsync(searchTerm);
         }
         public async Task<IEnumerable<Movie>> GetMoviesByCategoryAsync(int categoryId)
         {
             if (categoryId <= 0)
-                throw new ArgumentException("Category ID must be greater than zero.");
+                throw new ValidationException("Category ID must be greater than zero.");
       
             return await _repo.GetByCategoryAsync(categoryId);
         }
@@ -64,16 +67,16 @@ namespace StreamXAPI.Services
         private static void ValidateMovie(Movie movie)
         {
             if (movie == null)
-                throw new ArgumentNullException(nameof(movie));
+                throw new ValidationException("Movie cannot be null.");
 
             if (movie.Duration <= 0)
-                throw new ArgumentException("Invalid duration.");
+                throw new ValidationException("Invalid duration.");
 
             if (string.IsNullOrWhiteSpace(movie.Title))
-                throw new ArgumentException("Title is required.");
+                throw new ValidationException("Title is required.");
 
             if (movie.ReleaseDate > DateTime.UtcNow)
-                throw new ArgumentException("Release date is required.");
+                throw new ValidationException("Release date cannot be in the future.");
         }
     }
 }

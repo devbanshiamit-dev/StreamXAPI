@@ -14,5 +14,6 @@ namespace StreamXAPI.Repo
         Task RemoveAsync(int id);
         Task<bool> ExistsByIdAsync(int id);
         Task<bool> ExistsByTitleAsync(string title);
+        Task<bool> ExistsByTitleExceptIdAsync(string title, int id);
     }
 }
