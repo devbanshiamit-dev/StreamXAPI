@@ -13,14 +13,70 @@ namespace StreamXAPI.Repo
             _con = context;
         }
 
-        public async Task<PagedResult<Movie>> GetPagedMoviesAsync(PaginationParams paginationParams)
+        public async Task<PagedResult<Movie>> GetPagedMoviesAsync(MovieQueryParams queryParams)
         {
-            var totalCount = await _con.Movies.CountAsync();
+            var query = _con.Movies
+              .Include(m => m.MovieGenres)
+              .ThenInclude(mg => mg.Genre)
+              .Include(m => m.MovieActors)
+              .ThenInclude(ma => ma.Actor)
+              .AsNoTracking();
 
-            var items = await _con.Movies
-                .AsNoTracking()
-                .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
-                .Take(paginationParams.PageSize)
+            if (!string.IsNullOrEmpty(queryParams.Genre))
+            {
+                query = query.Where(m =>
+                    m.MovieGenres.Any(mg =>
+                    mg.Genre.GenreName == queryParams.Genre));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryParams.Actor))
+            {
+                query = query.Where(m => m.MovieActors.Any(ma =>
+                      ma.Actor.Name == queryParams.Actor));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryParams.Search))
+            {
+                query = query.Where(m =>
+                      m.Title.Contains(queryParams.Search) ||
+
+                      m.Description.Contains(queryParams.Search) ||
+
+                      m.MovieGenres.Any(mg =>
+                          mg.Genre.GenreName.Contains(queryParams.Search)) ||
+
+                      m.MovieActors.Any(ma =>
+                          ma.Actor.Name.Contains(queryParams.Search))
+                );
+            }
+
+
+            var totalCount = await query.CountAsync();
+
+            query = queryParams.SortBy?.ToLower() switch
+            {
+                "title" => query.OrderBy(m => m.Title),
+
+                "title_desc" => query.OrderByDescending(m => m.Title),
+
+                "rating" => query.OrderByDescending(m => m.Rating),
+
+                "rating_asc" => query.OrderBy(m => m.Rating),
+
+                "releasedate" => query.OrderByDescending(m => m.ReleaseDate),
+
+                "releasedate_asc" => query.OrderBy(m => m.ReleaseDate),
+
+                "duration" => query.OrderBy(m => m.Duration),
+
+                "duration_desc" => query.OrderByDescending(m => m.Duration),
+
+                _ => query.OrderBy(m => m.Id)
+            };
+
+            var items = await query
+                .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+                .Take(queryParams.PageSize)
                 .ToListAsync();
 
             return new PagedResult<Movie>
@@ -36,26 +92,7 @@ namespace StreamXAPI.Repo
         public async Task<bool> ExistsByTitleExceptIdAsync(string title, int id) =>
             await _con.Movies.AnyAsync(m => m.Title == title && m.Id != id);
 
-        public async Task<IEnumerable<Movie>> GetByCategoryAsync(int categoryId) =>
-            await _con.Genres
-                .Where(g => g.Id == categoryId)
-                .SelectMany(g => g.MovieGenres.Select(mg => mg.Movie))
-                .ToListAsync();
-
-        public async Task<IEnumerable<Movie>> SearchAsync(string searchTerm) =>
-            await _con.Movies
-                .Where(m =>
-                m.Title.Contains(searchTerm) || (m.Description != null &&
-                m.Description.Contains(searchTerm)))
-                .ToListAsync();
-
-        public async Task<IEnumerable<Movie>> GetByActorAsync(string actorName) =>
-            await _con.Movies
-                .Where(m => m.MovieActors.Any(ma => ma.Actor.Name == actorName))
-                .ToListAsync();
-
-
-        public  async Task AddAsync(Movie movie)
+        public async Task AddAsync(Movie movie)
         {
             _con.Movies.Add(movie);
             await _con.SaveChangesAsync();
