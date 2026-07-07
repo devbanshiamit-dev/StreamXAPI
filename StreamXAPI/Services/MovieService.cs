@@ -13,19 +13,19 @@ namespace StreamXAPI.Services
             _repo = repo;
         }
 
-        public async Task<PagedResult<Movie>> GetAllMoviesAsync(PaginationParams paginationParams)
+        public async Task<PagedResult<Movie>> GetAllMoviesAsync(MovieQueryParams queryParams)
         {
-            var pagedMovies = await _repo.GetPagedMoviesAsync(paginationParams);
+            var pagedMovies = await _repo.GetPagedMoviesAsync(queryParams);
 
-            var TotalPages = (int)Math.Ceiling((double)pagedMovies.TotalRecords / paginationParams.PageSize);
+            var TotalPages = (int)Math.Ceiling((double)pagedMovies.TotalRecords / queryParams.PageSize);
 
             return await Task.FromResult(new PagedResult<Movie>
             {
                 Items = pagedMovies.Items,
                 TotalPages = TotalPages,
                 TotalRecords = pagedMovies.TotalRecords,
-                CurrentPage = paginationParams.PageNumber,
-                PageSize = paginationParams.PageSize
+                CurrentPage = queryParams.PageNumber,
+                PageSize = queryParams.PageSize
             });
         }
 
@@ -56,28 +56,6 @@ namespace StreamXAPI.Services
             if (!await _repo.ExistsByIdAsync(id)) { throw new NotFoundException("Movie Not Found"); }
             await _repo.RemoveAsync(id);
         }
-        public async Task<IEnumerable<Movie>> GetMoviesByActorAsync(string actorName)
-        {
-            if (string.IsNullOrWhiteSpace(actorName))
-                throw new ValidationException("Actor name cannot be null or empty.");
-            
-            return await _repo.GetByActorAsync(actorName);
-        }
-        public async Task<IEnumerable<Movie>> SearchMoviesAsync(string searchTerm)
-        {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-                throw new ValidationException("Search term cannot be null or empty.");
-            
-            return await _repo.SearchAsync(searchTerm);
-        }
-        public async Task<IEnumerable<Movie>> GetMoviesByCategoryAsync(int categoryId)
-        {
-            if (categoryId <= 0)
-                throw new ValidationException("Category ID must be greater than zero.");
-      
-            return await _repo.GetByCategoryAsync(categoryId);
-        }
-
 
         private static void ValidateMovie(Movie movie)
         {

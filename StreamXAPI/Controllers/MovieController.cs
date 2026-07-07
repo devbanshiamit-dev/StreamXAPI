@@ -42,28 +42,9 @@ namespace StreamXAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMovies([FromQuery] PaginationParams paginationParams)
+        public async Task<IActionResult> GetMovies([FromQuery] MovieQueryParams queryParams)
         {
-            return Ok(await _mov.GetAllMoviesAsync(paginationParams));
-        }
-
-        [HttpGet("actor/{actorName}")]
-        public async Task<IActionResult> GetMoviesByActor(string actorName)
-        {
-            return Ok(await _mov.GetMoviesByActorAsync(actorName));
-        }
-
-        [HttpGet("Search/{searchTerm}")]
-        public async Task<IActionResult> SearchMovies(string searchTerm)
-        {
-            return Ok(await _mov.SearchMoviesAsync(searchTerm));
-        }
-        
-
-        [HttpGet("category/{categoryId}")]
-        public async Task<IActionResult> GetMoviesByCategory(int categoryId)
-        {
-            return Ok(await _mov.GetMoviesByCategoryAsync(categoryId));
+            return Ok(await _mov.GetAllMoviesAsync(queryParams));
         }
 
         [HttpGet("{id}")]
