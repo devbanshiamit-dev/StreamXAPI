@@ -11,7 +11,7 @@ namespace StreamXAPI.Repo
         {
             _context = context;
         }
-        public async Task<IEnumerable<Genre>> GetAllGenresAsync()
+        public async Task<List<Genre>> GetAllGenresAsync()
         {
             return await _context.Genres.AsNoTracking().ToListAsync();
         }

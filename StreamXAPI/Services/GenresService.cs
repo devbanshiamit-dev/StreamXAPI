@@ -1,6 +1,7 @@
 ﻿using StreamXAPI.Models;
 using StreamXAPI.Repo;
 using StreamXAPI.CustomeExceptions;
+using StreamXAPI.DTO.GenreDTO;
 
 namespace StreamXAPI.Services
 {
@@ -11,7 +12,7 @@ namespace StreamXAPI.Services
         {
             _repository = repository;
         }
-        public async Task<IEnumerable<Genre>> GetAllGenresAsync()
+        public async Task<List<Genre>> GetAllGenresAsync()
         {
             return await _repository.GetAllGenresAsync();
         }
@@ -24,30 +25,52 @@ namespace StreamXAPI.Services
             }
             return result;
         }
-        public async Task AddGenreAsync(Genre genre)
+        public async Task AddGenreAsync(CreateGenreDto genre)
         {
-            ValidateGenreProperty(genre);
+            if (string.IsNullOrWhiteSpace(genre.GenreName))
+            {
+                throw new ValidationException("Genre name cannot be empty.");
+            }
+
             var existingGenre = await _repository.GetGenreByNameAsync(genre.GenreName);
             if (existingGenre != null)
             {
                 throw new DuplicateException($"Genre with Name {genre.GenreName} already exists.");
             }
-            await _repository.AddGenreAsync(genre);
+
+            var genreEntity = new Genre
+            {
+                GenreName = genre.GenreName
+            };
+
+            await _repository.AddGenreAsync(genreEntity);
         }
-        public async Task UpdateGenreAsync(Genre genre)
+        public async Task UpdateGenreAsync(UpdateGenreDto genre)
         {
-            ValidateGenreProperty(genre);
+            if (string.IsNullOrWhiteSpace(genre.GenreName))
+            {
+                throw new ValidationException("Genre name cannot be empty.");
+            }
+
             var existingById = await _repository.GetGenreByIdAsync(genre.Id);
             if (existingById == null)
             {
                 throw new NotFoundException($"Genre with ID {genre.Id} not found.");
             }
+
             var existingGenre = await _repository.GetGenreByNameAsync(genre.GenreName);
             if (existingGenre != null && existingGenre.Id != genre.Id)
             {
                 throw new DuplicateException($"Genre with Name {genre.GenreName} already exists.");
             }
-            await _repository.UpdateGenreAsync(genre);
+
+            var genreEntity = new Genre
+            {
+                Id = genre.Id,
+                GenreName = genre.GenreName
+            };
+
+            await _repository.UpdateGenreAsync(genreEntity);
         }
         public async Task DeleteGenreAsync(int id)
         {
@@ -57,14 +80,6 @@ namespace StreamXAPI.Services
                 throw new NotFoundException($"Genre with ID {id} not found.");
             }
             await _repository.DeleteGenreAsync(id);
-        }
-
-        private static void ValidateGenreProperty(Genre genre)
-        {
-            if (string.IsNullOrWhiteSpace(genre.GenreName))
-            {
-                throw new ValidationException("Genre name cannot be empty.");
-            }
         }
     }
 }

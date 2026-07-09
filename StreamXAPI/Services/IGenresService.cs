@@ -1,13 +1,14 @@
-﻿using StreamXAPI.Models;
+﻿using StreamXAPI.DTO.GenreDTO;
+using StreamXAPI.Models;
 
 namespace StreamXAPI.Services
 {
     public interface IGenresService
     {
-        Task<IEnumerable<Genre>> GetAllGenresAsync();
+        Task<List<Genre>> GetAllGenresAsync();
         Task<Genre> GetGenreByIdAsync(int id);
-        Task AddGenreAsync(Genre genre);
-        Task UpdateGenreAsync(Genre genre);
+        Task AddGenreAsync(CreateGenreDto genre);
+        Task UpdateGenreAsync(UpdateGenreDto genre);
         Task DeleteGenreAsync(int id);
     }
 }

@@ -4,7 +4,7 @@ namespace StreamXAPI.Repo
 {
     public interface IGenreRepository
     {
-        Task<IEnumerable<Genre>> GetAllGenresAsync();
+        Task<List<Genre>> GetAllGenresAsync();
         Task<Genre?> GetGenreByIdAsync(int id);
         Task<Genre?> GetGenreByNameAsync(string name);
         Task AddGenreAsync(Genre genre);
