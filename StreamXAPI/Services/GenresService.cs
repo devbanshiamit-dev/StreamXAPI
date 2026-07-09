@@ -47,30 +47,14 @@ namespace StreamXAPI.Services
         }
         public async Task UpdateGenreAsync(UpdateGenreDto genre)
         {
-            if (string.IsNullOrWhiteSpace(genre.GenreName))
-            {
-                throw new ValidationException("Genre name cannot be empty.");
-            }
-
             var existingById = await _repository.GetGenreByIdAsync(genre.Id);
+
             if (existingById == null)
-            {
-                throw new NotFoundException($"Genre with ID {genre.Id} not found.");
-            }
+                throw new NotFoundException($"Genre Not Found");
 
-            var existingGenre = await _repository.GetGenreByNameAsync(genre.GenreName);
-            if (existingGenre != null && existingGenre.Id != genre.Id)
-            {
-                throw new DuplicateException($"Genre with Name {genre.GenreName} already exists.");
-            }
+            existingById.GenreName = genre.GenreName;
 
-            var genreEntity = new Genre
-            {
-                Id = genre.Id,
-                GenreName = genre.GenreName
-            };
-
-            await _repository.UpdateGenreAsync(genreEntity);
+            await _repository.UpdateGenreAsync(existingById);
         }
         public async Task DeleteGenreAsync(int id)
         {

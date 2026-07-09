@@ -19,9 +19,9 @@ namespace StreamXAPI.Repo
         {
             return await _context.Genres.FindAsync(id);
         }
-        public async Task<Genre?> GetGenreByNameAsync(string name)
+        public async Task<Genre?> GetGenreByNameAsync(string GenreName)
         {
-            return await _context.Genres.FirstOrDefaultAsync(g => g.GenreName == name);
+            return await _context.Genres.FirstOrDefaultAsync(g => g.GenreName == GenreName);
         }
         public async Task AddGenreAsync(Genre genre)
         {
@@ -30,7 +30,6 @@ namespace StreamXAPI.Repo
         }
         public async Task UpdateGenreAsync(Genre genre)
         {
-            _context.Genres.Update(genre);
             await _context.SaveChangesAsync();
         }
         public async Task DeleteGenreAsync(int id)

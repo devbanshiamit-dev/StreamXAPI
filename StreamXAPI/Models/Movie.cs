@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StreamXAPI.Models
 {
@@ -43,6 +44,7 @@ namespace StreamXAPI.Models
 
         [MaxLength(100)]
         [Required]
+        [Column("Name")]
         public string GenreName { get; set; } = string.Empty;
 
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();

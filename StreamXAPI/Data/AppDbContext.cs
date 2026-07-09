@@ -45,6 +45,10 @@ namespace StreamXAPI.Data
                 .HasOne(mg => mg.Genre)
                 .WithMany(g => g.MovieGenres)
                 .HasForeignKey(mg => mg.GenreId);
+
+            modelBuilder.Entity<Genre>()
+                .Property(g => g.GenreName)
+                .HasColumnName("Name");
         }
 
         public DbSet<Movie> Movies { get; set; }
