@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StreamXAPI.Models;
+using StreamXAPI.DTO.MovieDTO;
+using StreamXAPI.DTO.ActorDTO;
+using StreamXAPI.DTO.GenreDTO;
 using StreamXAPI.Pagination;
 using StreamXAPI.Services;
 
@@ -17,19 +19,16 @@ namespace StreamXAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddMovie([FromBody] Movie movie)
+        public async Task<IActionResult> AddMovie([FromBody] CreateMovieDTO movie)
         {
-            await _mov.AddMovieAsync(movie);
-            return CreatedAtAction(nameof(GetMovieById), new { id = movie.Id }, movie);
+            var createdMovie = await _mov.AddMovieAsync(movie);
+            return CreatedAtAction(nameof(GetMovieById), new { id = createdMovie.Id }, createdMovie);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMovie(int id, [FromBody] Movie movie)
+        public async Task<IActionResult> UpdateMovie(int id, [FromBody] UpdateMovieDTO movie)
         {
-            if (id != movie.Id)
-                return BadRequest();
-
-            await _mov.UpdateMovieAsync(movie);
+            await _mov.UpdateMovieAsync(id ,movie);
             return Ok(movie);
         }
 

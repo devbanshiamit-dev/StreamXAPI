@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StreamXAPI.Data;
+using StreamXAPI.DTO.GenreDTO;
+using StreamXAPI.DTO.MovieDTO;
 using StreamXAPI.Models;
 using StreamXAPI.Pagination;
 
@@ -87,7 +89,10 @@ namespace StreamXAPI.Repo
         }
 
         public async Task<Movie?> GetByIdAsync(int id) =>
-            await _con.Movies.FirstOrDefaultAsync(m => m.Id == id);
+            await _con.Movies
+            .Include(m => m.MovieGenres)
+            .Include(m => m.MovieActors)
+            .FirstOrDefaultAsync(m => m.Id == id);
 
         public async Task<bool> ExistsByTitleExceptIdAsync(string title, int id) =>
             await _con.Movies.AnyAsync(m => m.Title == title && m.Id != id);
@@ -100,7 +105,6 @@ namespace StreamXAPI.Repo
 
         public async Task UpdateAsync(Movie movie)
         {
-            _con.Movies.Update(movie);
             await _con.SaveChangesAsync();
         }
 
@@ -119,5 +123,41 @@ namespace StreamXAPI.Repo
 
         public async Task<bool> ExistsByTitleAsync(string title) =>
             await _con.Movies.AnyAsync(m => m.Title == title);
+
+        public async Task AddActorsAsync(Movie movie, UpdateMovieActorsDTO actors)
+        {
+            foreach (var actor in actors.Actors)
+            {
+                movie.MovieActors.Add(new MovieActor
+                {
+                    ActorId = actor.ActorId,
+                    CharacterName = actor.CharacterName,
+                });
+            }
+            await _con.SaveChangesAsync();
+        }
+        public async Task RemoveActorAsync(MovieActor actor)
+        {
+            _con.MovieActors.Remove(actor);
+            await _con.SaveChangesAsync();
+        }
+
+        public async Task AddGenresAsync(Movie movie, UpdateMovieGenresDTO dto)
+        {
+            foreach (var genreId in dto.GenreIds)
+            {
+                movie.MovieGenres.Add(new MovieGenre
+                {
+                    GenreId = genreId
+                });
+            }
+
+            await _con.SaveChangesAsync();
+        }
+        public async Task RemoveGenreAsync(MovieGenre genre)
+        {
+            _con.MovieGenres.Remove(genre);
+            await _con.SaveChangesAsync();
+        }
     }
 }
