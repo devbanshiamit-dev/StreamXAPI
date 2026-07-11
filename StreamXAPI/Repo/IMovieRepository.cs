@@ -19,5 +19,6 @@ namespace StreamXAPI.Repo
         Task RemoveActorAsync(MovieActor actor);
         Task AddGenresAsync(Movie movie, UpdateMovieGenresDTO dto);
         Task RemoveGenreAsync(MovieGenre genre);
+        Task AddRangeAsync(List<Movie> movies);
     }
 }

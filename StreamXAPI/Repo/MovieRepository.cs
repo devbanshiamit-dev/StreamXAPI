@@ -76,8 +76,9 @@ namespace StreamXAPI.Repo
                 _ => query.OrderBy(m => m.Id)
             };
 
+            var skip = Math.Max(0, (queryParams.PageNumber - 1) * queryParams.PageSize);
             var items = await query
-                .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+                .Skip(skip)
                 .Take(queryParams.PageSize)
                 .ToListAsync();
 
@@ -157,6 +158,13 @@ namespace StreamXAPI.Repo
         public async Task RemoveGenreAsync(MovieGenre genre)
         {
             _con.MovieGenres.Remove(genre);
+            await _con.SaveChangesAsync();
+        }
+
+        //temp method
+        public async Task AddRangeAsync(List<Movie> movies)
+        {
+            await _con.Movies.AddRangeAsync(movies);
             await _con.SaveChangesAsync();
         }
     }

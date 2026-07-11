@@ -3,6 +3,7 @@ using StreamXAPI.Data;
 using StreamXAPI.MiddleWare;
 using StreamXAPI.Repo;
 using StreamXAPI.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,14 @@ builder.Services.AddScoped<IActorService, ActorService>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+//temp Service
+//builder.Services.AddControllers()
+//    .AddJsonOptions(options =>
+//    {
+//        options.JsonSerializerOptions.ReferenceHandler =
+//            ReferenceHandler.IgnoreCycles;
+//    });
 
 var app = builder.Build();
 

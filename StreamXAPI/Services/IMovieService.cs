@@ -16,5 +16,6 @@ namespace StreamXAPI.Services
         Task RemoveActorAsync(int movieId, int actorId);
         Task AddGenresAsync(int movieId, UpdateMovieGenresDTO dto);
         Task RemoveGenreAsync(int movieId, int genreId);
+        Task AddMoviesAsync(List<CreateMovieDTO> movies);
     }
 }

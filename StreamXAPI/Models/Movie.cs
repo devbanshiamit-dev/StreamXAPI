@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace StreamXAPI.Models
 {
@@ -47,12 +48,14 @@ namespace StreamXAPI.Models
         [Column("Name")]
         public string GenreName { get; set; } = string.Empty;
 
+        [JsonIgnore]
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
     }
     public class MovieGenre
     {
         public int MovieId { get; set; }
 
+        [JsonIgnore]
         public Movie Movie { get; set; } = null!;
 
         public int GenreId { get; set; }
@@ -73,12 +76,14 @@ namespace StreamXAPI.Models
         [Url]
         public string ImageUrl { get; set; } = string.Empty;
 
+        [JsonIgnore]
         public ICollection<MovieActor> MovieActors { get; set; } = new List<MovieActor>();
     }
     public class MovieActor
     {
         public int MovieId { get; set; }
 
+        [JsonIgnore]
         public Movie Movie { get; set; } = null!;
 
         public int ActorId { get; set; }

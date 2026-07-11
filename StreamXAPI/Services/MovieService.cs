@@ -172,5 +172,21 @@ namespace StreamXAPI.Services
 
             await _repo.RemoveGenreAsync(genre);
         }
+
+        //Temp Method
+        public async Task AddMoviesAsync(List<CreateMovieDTO> movies)
+        {
+            // Validation
+
+            var movieEntities = movies.Select(m => new Movie
+            {
+                Title = m.Title,
+                Description = m.Description,
+                ReleaseDate = m.ReleaseDate,
+                Duration = m.Duration
+            }).ToList();
+
+            await _repo.AddRangeAsync(movieEntities);
+        }
     }
 }
