@@ -1,9 +1,20 @@
 # 🎬 StreamXAPI
 
-StreamXAPI is a **Movie Management Backend API** built using **ASP.NET Core Web API**.
-It provides a structured and scalable backend system to manage movies, actors, genres, and their relationships.
+A production-ready **Movie Management Backend API** built with **ASP.NET Core Web API**.
 
-The API follows a clean architecture approach with separation between controllers, services, repositories, and database layers.
+StreamXAPI provides a scalable backend for managing movies, actors, genres, and their relationships while following a clean layered architecture. The project demonstrates modern backend development practices including **Docker containerization**, **PostgreSQL**, **Entity Framework Core**, **Rate Limiting**, **Global Exception Handling**, and **Cloud Deployment on Railway**.
+
+> ⚠️ This project was built as a learning and portfolio project to strengthen backend engineering skills while exploring real-world deployment workflows.
+
+---
+
+# 🌐 Live API
+
+**Production URL**
+
+```
+https://streamxapi-production.up.railway.app
+```
 
 ---
 
@@ -11,96 +22,134 @@ The API follows a clean architecture approach with separation between controller
 
 ## 🎥 Movie Management
 
-* Create, Read, Update, Delete Movies
+* Create, Read, Update and Delete Movies
 * Search movies by title
-* Pagination support
-* Sorting support
-* Filtering support
+* Pagination
+* Sorting
+* Filtering
 
 ## 🎭 Actor Management
 
-* Create, update, delete actors
-* Manage actor details
+* Create, update and delete actors
 * Assign actors to movies
 * Store character names
 
 ## 🎞️ Genre Management
 
-* Create, update, delete genres
+* Create, update and delete genres
 * Assign multiple genres to movies
 
-## 🔗 Movie Relationships
-
-Implemented many-to-many relationships:
+## 🔗 Many-to-Many Relationships
 
 ```
 Movie
- |
- |--- MovieGenre --- Genre
-
-
-Movie
- |
- |--- MovieActor --- Actor
+ │
+ ├── MovieGenre ─── Genre
+ │
+ └── MovieActor ─── Actor
 ```
 
 ---
 
-# 🛠️ Tech Stack
+# 🛠 Tech Stack
 
-* ASP.NET Core Web API
+* ASP.NET Core Web API (.NET 10)
 * C#
 * Entity Framework Core
-* SQL Server
+* PostgreSQL
+* Docker
+* Railway
 * LINQ
-* Swagger / OpenAPI
 * Repository Pattern
 * Dependency Injection
+* ASP.NET Core Rate Limiting
+* Global Exception Handling
+* OpenAPI
 
 ---
 
-# 🏗️ Architecture
-
-StreamXAPI follows a layered architecture:
+# 🏗 Architecture
 
 ```
-Controller Layer
-        |
-        ↓
-Service Layer
-        |
-        ↓
-Repository Layer
-        |
-        ↓
+Controller
+      │
+      ▼
+Service
+      │
+      ▼
+Repository
+      │
+      ▼
 Entity Framework Core
-        |
-        ↓
-SQL Server Database
+      │
+      ▼
+PostgreSQL
 ```
 
 ### Controller Layer
 
-Handles:
+Responsible for:
 
-* HTTP requests
-* Request validation
-* HTTP responses
+* HTTP Requests
+* Validation
+* HTTP Responses
 
 ### Service Layer
 
-Handles:
+Responsible for:
 
-* Business logic
-* Data processing
-* Validation rules
+* Business Logic
+* Data Processing
+* Validation Rules
 
 ### Repository Layer
 
-Handles:
+Responsible for:
 
-* Database communication
-* Entity Framework Core queries
+* Database Communication
+* Entity Framework Core Queries
+
+---
+
+# 📦 Docker
+
+The application is fully containerized using a multi-stage Docker build.
+
+Docker was used to:
+
+* Build the application
+* Publish optimized production binaries
+* Run the API inside a container
+* Create an environment independent deployment
+
+---
+
+# ☁️ Cloud Deployment
+
+The API is deployed on **Railway**.
+
+Deployment includes:
+
+* Docker-based deployment
+* Railway PostgreSQL
+* Environment Variables
+* Automatic deployment from GitHub
+
+---
+
+# 🗄 Database
+
+Originally developed using SQL Server and later migrated to PostgreSQL for cloud deployment.
+
+Database includes:
+
+* Movies
+* Actors
+* Genres
+* MovieActor
+* MovieGenre
+
+Entity Framework Core Migrations are used for database version control.
 
 ---
 
@@ -108,48 +157,36 @@ Handles:
 
 ## Pagination
 
-Example:
-
 ```
 GET /api/movie?pageNumber=1&pageSize=10
 ```
 
 Supports:
 
-* Page number
-* Page size
-* Total records
-* Total pages
+* Page Number
+* Page Size
+* Total Records
+* Total Pages
 
 ---
 
 ## Search
 
-Example:
-
 ```
 GET /api/movie?search=Avengers
 ```
-
-Search movies by title.
 
 ---
 
 ## Sorting
 
-Example:
-
 ```
 GET /api/movie?sortBy=rating&sortOrder=desc
 ```
 
-Supports sorting based on movie fields.
-
 ---
 
 ## Filtering
-
-Movies can be filtered using available query parameters.
 
 Example:
 
@@ -161,42 +198,34 @@ GET /api/movie?year=2024
 
 # 🔐 Rate Limiting
 
-StreamXAPI implements ASP.NET Core built-in Rate Limiting middleware.
+ASP.NET Core built-in Rate Limiting middleware is implemented.
+
+Current Configuration:
+
+```
+30 Requests / Minute
+```
+
+When exceeded:
+
+```
+HTTP 429
+Too Many Requests
+```
 
 Purpose:
 
 * Prevent API abuse
-* Protect server resources
-* Control excessive requests
-
-Current configuration:
-
-```
-Limit: 30 requests per minute
-Response: 429 Too Many Requests
-```
-
-When the limit is exceeded:
-
-```
-HTTP 429 - Too Many Requests
-```
-
-is returned.
+* Reduce unnecessary server load
+* Protect backend resources
 
 ---
 
-# ⚠️ Exception Handling
+# ⚠️ Global Exception Handling
 
-Implemented global exception handling middleware.
+Centralized exception handling provides consistent API responses.
 
-Benefits:
-
-* Centralized error management
-* Consistent API error responses
-* Prevents exposing sensitive server details
-
-Example response:
+Example:
 
 ```json
 {
@@ -206,26 +235,12 @@ Example response:
 }
 ```
 
----
+Benefits:
 
-# 🗄️ Database Design
-
-Main entities:
-
-```
-Movie
- |
- |--- MovieActor
- |          |
- |          Actor
-
-
-Movie
- |
- |--- MovieGenre
-            |
-            Genre
-```
+* Cleaner controllers
+* Consistent responses
+* Better debugging
+* No sensitive information leakage
 
 ---
 
@@ -235,57 +250,108 @@ Movie
 StreamXAPI
 
 ├── Controllers
-│
 ├── Services
-│
 ├── Repository
-│
 ├── Models
-│
-├── DTO
-│
+├── DTOs
 ├── Data
-│
 ├── Middleware
-│
+├── Migrations
+├── Dockerfile
 └── Program.cs
 ```
 
 ---
 
-# 📖 API Documentation
+# ⚙️ Running Locally
 
-Swagger UI is available for API testing and documentation.
+Clone the repository
+
+```bash
+git clone https://github.com/devbanshiamit-dev/StreamXAPI.git
+```
+
+Navigate to the project
+
+```bash
+cd StreamXAPI
+```
+
+Configure the database connection using the following Environment Variable:
+
+```
+ConnectionStrings__DefaultConnection
+```
+
+Run the project
+
+```bash
+dotnet run
+```
+
+---
+
+# 🐳 Running with Docker
+
+Build the image
+
+```bash
+docker build -t streamxapi .
+```
+
+Run the container
+
+```bash
+docker run -p 8080:8080 \
+-e ConnectionStrings__DefaultConnection="YOUR_CONNECTION_STRING" \
+streamxapi
+```
+
+---
+
+# 🔒 Configuration
+
+This project uses **Environment Variables** for sensitive configuration such as database connection strings.
 
 Example:
 
 ```
-https://localhost:7159/swagger
+ConnectionStrings__DefaultConnection
 ```
+
+Secrets are intentionally **not stored** inside the repository.
 
 ---
 
-# 🔮 Future Improvements
-
-Planned features:
+# 🚀 Future Improvements
 
 * JWT Authentication & Authorization
 * Refresh Token System
-* Multi-language Movie Support
-* Response DTO Improvements
+* Role-Based Authorization
+* Logging
 * Unit Testing
-* Logging System
+* Redis Caching
+* Health Checks
+* CI/CD Pipeline
 * React Frontend Integration
-* Cloud Deployment
+* Kubernetes Deployment
 
 ---
 
-# 👨‍💻 Developer
+# 👨‍💻 About This Project
 
-Built with ❤️ using ASP.NET Core Web API.
+This project was built as part of my backend engineering learning journey.
+
+The primary objective was not only to develop a REST API, but also to gain hands-on experience with:
+
+* Docker
+* PostgreSQL
+* Entity Framework Core
+* Cloud Deployment
+* Production-style configuration using Environment Variables
 
 ---
 
 # 📜 License
 
-This project is created for learning, portfolio, and demonstration purposes.
+This project is intended for learning, portfolio, and demonstration purposes.
