@@ -4,9 +4,11 @@ using StreamXAPI.DTO.ActorDTO;
 using StreamXAPI.DTO.GenreDTO;
 using StreamXAPI.Pagination;
 using StreamXAPI.Services;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace StreamXAPI.Controllers
 {
+    [EnableRateLimiting("fixed")]
     [Route("api/[controller]")]
     [ApiController]
     public class MovieController : ControllerBase
