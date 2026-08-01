@@ -21,6 +21,10 @@ builder.Services.AddScoped<IActorRepository, ActorRepository>();
 builder.Services.AddScoped<IActorService, ActorService>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+
 builder.Services.AddProblemDetails();
 
 builder.Services.AddRateLimiter(options =>
@@ -47,6 +51,10 @@ app.UseHttpsRedirection();
 app.UseRateLimiter();
 
 app.UseExceptionHandler();
+
+app.UseMiddleware<AuthenticationMiddleware>();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
