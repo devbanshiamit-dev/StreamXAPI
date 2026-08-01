@@ -4,6 +4,7 @@ using StreamXAPI.Data;
 using StreamXAPI.MiddleWare;
 using StreamXAPI.Repo;
 using StreamXAPI.Services;
+using StreamXAPI.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddScoped<IGenresService, GenresService>();
 
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
 builder.Services.AddScoped<IActorService, ActorService>();
+
+builder.Services.AddScoped<IJwtValidation, JwtValidation>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
