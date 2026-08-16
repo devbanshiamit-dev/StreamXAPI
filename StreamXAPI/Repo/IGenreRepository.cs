@@ -1,4 +1,5 @@
-﻿using StreamXAPI.Models;
+﻿using StreamXAPI.DTO.GenreDTO;
+using StreamXAPI.Models;
 
 namespace StreamXAPI.Repo
 {
@@ -10,5 +11,6 @@ namespace StreamXAPI.Repo
         Task AddGenreAsync(Genre genre);
         Task UpdateGenreAsync(Genre genre);
         Task DeleteGenreAsync(int id);
+        Task AddGenresBulkAsync(List<CreateGenreDto> genres); //temp
     }
 }

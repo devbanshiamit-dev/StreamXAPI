@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StreamXAPI.DTO.GenreDTO;
-using StreamXAPI.Models;
+using StreamXAPI.Repo;
 using StreamXAPI.Services;
 
 namespace StreamXAPI.Controllers
@@ -11,9 +10,11 @@ namespace StreamXAPI.Controllers
     public class GenreController : ControllerBase
     {
         private readonly IGenresService _ser;
-        public GenreController(IGenresService ser)
+        private readonly IGenreRepository repository; //temp
+        public GenreController(IGenresService ser, IGenreRepository repository)
         {
             _ser = ser;
+            this.repository = repository;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllGenres()
@@ -42,6 +43,19 @@ namespace StreamXAPI.Controllers
         {
             await _ser.DeleteGenreAsync(id);
             return NoContent();
+        }
+
+        //temp
+        [HttpPost("bulk-genres")]
+        public async Task<IActionResult> AddBulkGenres([FromBody] List<CreateGenreDto> genres)
+        {
+            await repository.AddGenresBulkAsync(genres);
+
+            return Ok(new
+            {
+                message = "Genres added successfully",
+                count = genres.Count
+            });
         }
     }
 }

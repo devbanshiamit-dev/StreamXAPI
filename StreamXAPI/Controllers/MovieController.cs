@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StreamXAPI.DTO.MovieDTO;
-using StreamXAPI.DTO.ActorDTO;
 using StreamXAPI.DTO.GenreDTO;
 using StreamXAPI.Pagination;
 using StreamXAPI.Services;

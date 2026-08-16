@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StreamXAPI.Data;
+using StreamXAPI.DTO.GenreDTO;
 using StreamXAPI.Models;
 
 namespace StreamXAPI.Repo
@@ -40,6 +41,17 @@ namespace StreamXAPI.Repo
                 _context.Genres.Remove(genre);
                 await _context.SaveChangesAsync();
             }
+        }
+        //temp method
+        public async Task AddGenresBulkAsync(List<CreateGenreDto> genres)
+        {
+            var genreEntities = genres.Select(g => new Genre
+            {
+                GenreName = g.GenreName
+            }).ToList();
+
+            await _context.Genres.AddRangeAsync(genreEntities);
+            await _context.SaveChangesAsync();
         }
     }
 }

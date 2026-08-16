@@ -1,7 +1,8 @@
-﻿using StreamXAPI.Models;
-using StreamXAPI.Repo;
-using StreamXAPI.CustomeExceptions;
+﻿using StreamXAPI.CustomeExceptions;
 using StreamXAPI.DTO.GenreDTO;
+using StreamXAPI.DTO.MovieDTO;
+using StreamXAPI.Models;
+using StreamXAPI.Repo;
 
 namespace StreamXAPI.Services
 {
@@ -65,5 +66,7 @@ namespace StreamXAPI.Services
             }
             await _repository.DeleteGenreAsync(id);
         }
+
+
     }
 }
