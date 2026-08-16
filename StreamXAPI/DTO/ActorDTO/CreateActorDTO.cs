@@ -9,7 +9,7 @@ namespace StreamXAPI.DTO.ActorDTO
         public string Name { get; set; } = string.Empty;
 
         [Required]
-        public DateTime DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
 
         [Url]
         public string ImageUrl { get; set; } = string.Empty;

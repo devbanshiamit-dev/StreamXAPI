@@ -89,23 +89,27 @@ namespace StreamXAPI.Services
         }
 
 
-        private static void IsValidDateOfBirth(DateTime dob)
+        private static void IsValidDateOfBirth(DateOnly dob)
         {
-            // 1. Check if the date was never set (is MinValue)
-            if (dob == DateTime.MinValue)
-            {
-                throw new ValidationException("Date of birth is required.");
-            }
+            // 1. Optional: Reject default value if needed
+            // if (dob == default)
+            // {
+            //     throw new ValidationException("Date of birth is required.");
+            // }
 
-            // 2. Check if the date is in the future
-            if (dob > DateTime.Today)
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+            // 2. Cannot be in the future
+            if (dob > today)
             {
                 throw new ValidationException("Date of birth cannot be in the future.");
             }
 
-            // 3. Check for reasonable age limit (e.g., maximum 120 years old)
+            // 3. Maximum age check (e.g. 120 years)
             const int maxAge = 120;
-            if (dob < DateTime.Today.AddYears(-maxAge))
+            var minAllowedDate = today.AddYears(-maxAge);
+
+            if (dob < minAllowedDate)
             {
                 throw new ValidationException($"Date of birth cannot be more than {maxAge} years ago.");
             }
