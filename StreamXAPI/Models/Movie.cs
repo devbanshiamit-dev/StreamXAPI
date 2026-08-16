@@ -66,12 +66,12 @@ namespace StreamXAPI.Models
     public class Actor
     {
         public int Id { get; set; }
-        
+
         [Required]
         [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
 
-        public DateTime DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
 
         [Url]
         public string ImageUrl { get; set; } = string.Empty;
