@@ -10,7 +10,7 @@ namespace StreamXAPI.DTO.MovieDTO
         [Required]
         public string Description { get; set; } = string.Empty;
         [Required]
-        public DateTime ReleaseDate { get; set; }
+        public DateOnly ReleaseDate { get; set; }
         [Required]
         public string ThumbnailUrl { get; set; } = string.Empty;
         [Required]

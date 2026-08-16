@@ -44,8 +44,10 @@ namespace StreamXAPI.Services
             if (string.IsNullOrWhiteSpace(movie.Title))
                 throw new ValidationException("Title is required.");
 
-            if (movie.ReleaseDate > DateTime.UtcNow)
+            if (movie.ReleaseDate > DateOnly.FromDateTime(DateTime.UtcNow))
+            {
                 throw new ValidationException("Release date cannot be in the future.");
+            }
 
             if (movie.GenreIds == null || !movie.GenreIds.Any())
                 throw new ValidationException("At least one genre is required.");
@@ -83,8 +85,10 @@ namespace StreamXAPI.Services
             if (string.IsNullOrWhiteSpace(movie.Title))
                 throw new ValidationException("Title is required.");
 
-            if (movie.ReleaseDate > DateTime.UtcNow)
+            if (movie.ReleaseDate > DateOnly.FromDateTime(DateTime.UtcNow))
+            {
                 throw new ValidationException("Release date cannot be in the future.");
+            }
 
             var existingMovie = await _repo.GetByIdAsync(id);
 

@@ -16,7 +16,7 @@ namespace StreamXAPI.Models
         public string Description { get; set; } = string.Empty;
 
         [Required]
-        public DateTime ReleaseDate { get; set; }
+        public DateOnly ReleaseDate { get; set; }
 
         [Url]
         public string ThumbnailUrl { get; set; } = string.Empty;
