@@ -53,7 +53,7 @@ namespace StreamXAPI.Controllers
         }
 
         //temp method
-        [HttpPost]
+        [HttpPost("Add-Bulk")]
         public async Task<IActionResult> AddActorsAsync(List<Actor> Act)
         {
             await _repo.AddInBulkAsync(Act);
