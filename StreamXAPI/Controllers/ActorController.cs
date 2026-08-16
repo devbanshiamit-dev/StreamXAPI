@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StreamXAPI.DTO.ActorDTO;
+using StreamXAPI.Models;
+using StreamXAPI.Repo;
 using StreamXAPI.Services;
 
 namespace StreamXAPI.Controllers
@@ -10,10 +12,12 @@ namespace StreamXAPI.Controllers
     public class ActorController : ControllerBase
     {
         private readonly IActorService _ser;
+        private readonly IActorRepository _repo;
 
-        public ActorController(IActorService ser)
+        public ActorController(IActorService ser , IActorRepository repository)
         {
             _ser = ser;
+            _repo = repository;
         }
 
         [HttpGet]
@@ -46,6 +50,18 @@ namespace StreamXAPI.Controllers
         {
             await _ser.DeleteAsync(id);
             return NoContent();
+        }
+
+        //temp method
+        [HttpPost]
+        public async Task<IActionResult> AddActorsAsync(List<Actor> Act)
+        {
+            await _repo.AddInBulkAsync(Act);
+            return Ok(new
+            {
+                message = "Actors Added",
+                count =Act.Count,
+            });
         }
     }
 }

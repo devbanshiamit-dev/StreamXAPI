@@ -10,5 +10,6 @@ namespace StreamXAPI.Repo
         Task AddActorAsync(Actor actor);
         Task UpdateActorAsync(Actor actor);
         Task DeleteActorAsync(Actor actor);
+        Task AddInBulkAsync(List<Actor> actors); //temp
     }
 }

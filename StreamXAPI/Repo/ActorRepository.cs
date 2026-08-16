@@ -47,5 +47,19 @@ namespace StreamXAPI.Repo
             _con.Actors.Remove(actor);
             await _con.SaveChangesAsync();
         }
+
+        //temp method
+        public async Task AddInBulkAsync(List<Actor> actors)
+        {
+            var Actorlist = actors.Select(a => new Actor
+            {
+                Name = a.Name,
+                DateOfBirth = a.DateOfBirth,
+                ImageUrl = a.ImageUrl
+            }).ToList();
+
+            await _con.Actors.AddRangeAsync(Actorlist);
+            await _con.SaveChangesAsync();
+        } 
     }
 }
