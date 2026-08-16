@@ -164,8 +164,16 @@ namespace StreamXAPI.Repo
         //temp method
         public async Task AddRangeAsync(List<Movie> movies)
         {
-            await _con.Movies.AddRangeAsync(movies);
-            await _con.SaveChangesAsync();
+            try
+            {
+                await _con.Movies.AddRangeAsync(movies);
+                await _con.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
     }
 }
