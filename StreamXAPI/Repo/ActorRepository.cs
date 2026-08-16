@@ -58,8 +58,16 @@ namespace StreamXAPI.Repo
                 ImageUrl = a.ImageUrl
             }).ToList();
 
-            await _con.Actors.AddRangeAsync(Actorlist);
-            await _con.SaveChangesAsync();
+            try
+            {
+                await _con.Actors.AddRangeAsync(Actorlist);
+                await _con.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         } 
     }
 }
